@@ -1,10 +1,21 @@
-#include"gmock/gmock.h"
-#include"similarityChecker.cpp"
+#include "gmock/gmock.h"
+#include "similarityChecker.cpp"
+using namespace testing;
+
+class LengthFixture : public Test {
+public :
+	LengthChecker app;
+
+	void diagLength(int extpectedScore, string str1, string str2) {
+		int actual = app.getLengthScore(str1, str2);
+		EXPECT_EQ(extpectedScore, actual);
+	}
+};
 
 TEST(TS, EXCEPTION01) {
-	LenghChecker app;
+	LengthChecker app;
 	try {
-		int ret = app.getPoint("", "");
+		int ret = app.getLengthScore("", "");
 		FAIL();
 	}
 	catch (exception e){
@@ -13,9 +24,9 @@ TEST(TS, EXCEPTION01) {
 }
 
 TEST(TS, EXCEPTION02) {
-	LenghChecker app;
+	LengthChecker app;
 	try {
-		int ret = app.getPoint("123", "123");
+		int ret = app.getLengthScore("123", "123");
 		FAIL();
 	}
 	catch (exception e) {
@@ -24,9 +35,9 @@ TEST(TS, EXCEPTION02) {
 }
 
 TEST(TS, EXCEPTION03) {
-	LenghChecker app;
+	LengthChecker app;
 	try {
-		int ret = app.getPoint("abc", "ab");
+		int ret = app.getLengthScore("abc", "ab");
 		FAIL();
 	}
 	catch (exception e) {
@@ -34,25 +45,14 @@ TEST(TS, EXCEPTION03) {
 	}
 }
 
-TEST(TS, TC01) {
-	LenghChecker app;
-	int ret = app.getPoint("ABC", "ABC");
-	EXPECT_EQ(60, ret);
+TEST_F(LengthFixture, TC01) {
+	diagLength(60, "ABC", "ABC");
 }
 
-TEST(TS, TC02) {
-	LenghChecker app;
-	int ret = app.getPoint("CDE", "AB");
-	EXPECT_EQ(30, ret);
+TEST_F(LengthFixture, TC02) {
+	diagLength(30, "CDE", "AB");
 }
-TEST(TS, TC03) {
-	LenghChecker app;
-	int ret = app.getPoint("AB", "ABC");
-	EXPECT_EQ(30, ret);
-}
-TEST(TS, TC04) {
-	LenghChecker app;
-	int ret = app.getPoint("AB", "ABCD");
-	EXPECT_EQ(0, ret);
+TEST_F(LengthFixture, TC03) {
+	diagLength(0, "AB", "ABCD");
 }
 

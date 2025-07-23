@@ -3,25 +3,31 @@
 
 using namespace std;
 
-class LenghChecker {
+class LengthChecker {
 
 public:
-	int getPoint(const string& str1, const string& str2) {
+	int getLengthScore(const string& str1, const string& str2) {
 		int result = 0;
 
 		assertInvalidArgument(str1, str2);
 
-		result += getLengthScore(str1, str2);
+		int A = std::max(str1.length(), str2.length());
+		int B = std::min(str1.length(), str2.length());
+		if (A == B) return LENGTH_MAX_SCORE;
+		if (isDoubleLength(A, B)) return LENGTH_MIN_SCORE;
 
-		
-
-
-		return result;
+		return getLengthPartitionScore(A, B);
 	}
 
 	
 
+	
+
+	
+
 private:
+	const int LENGTH_MAX_SCORE = 60;
+	const int LENGTH_MIN_SCORE = 0;
 
 	void assertInvalidArgument(const std::string& str1, const std::string& str2)
 	{
@@ -38,15 +44,14 @@ private:
 		}
 	}
 
-	int getLengthScore(const std::string& str1, const std::string& str2)
+	int getLengthPartitionScore(int A, int B)
 	{
-		int str1Length = str1.length();
-		int str2Length = str2.length();
-		if (str1Length == str2Length) return 60;
-		if (str1Length < str2Length) {
-			swap(str1Length, str2Length);
-		}
-		if (str1Length >= str2Length * 2) return 0;
-		return 60 * (str2Length - (str1Length - str2Length)) / str2Length;
+		int Gap = A - B;
+		return (LENGTH_MAX_SCORE - (LENGTH_MAX_SCORE * Gap) / B);
+	}
+
+	bool isDoubleLength(int A, int B)
+	{
+		return A >= B * 2;
 	}
 };
