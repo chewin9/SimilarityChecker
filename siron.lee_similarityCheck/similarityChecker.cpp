@@ -1,0 +1,4 @@
+class LenghChecker {
+public:
+
+};
